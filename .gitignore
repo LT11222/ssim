@@ -1,0 +1,9 @@
+#ignore python bytecode
+*.pyc
+
+#ignore build folder
+build/
+
+#ignore data
+data.db
+data.txt
