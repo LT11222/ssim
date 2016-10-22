@@ -24,7 +24,7 @@ def total_size(o, handlers={}, verbose=False):
                     deque: iter,
                     dict: dict_handler,
                     set: iter,
-                    frozenset: iter,
+                    frozenset: iter
                    }
     all_handlers.update(handlers)     # user handlers take precedence
     seen = set()                      # track which object id's have already been seen
