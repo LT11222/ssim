@@ -100,24 +100,20 @@ def combos(imagelist,cursor):
 	pair_dim = makekey(macrosize,dimensions)
 	templist = cursor.execute('SELECT image_one,image_two,"%s" FROM ssim' % pair_dim).fetchall()
 	templist = {(x[0],x[1]):x[2] for x in templist}
-
-	yield [imagelist[0],imagelist[1]]
 	
 	ratio1 = float(imagelist[0].h)/imagelist[0].w
 	ratio2 = float(imagelist[1].h)/imagelist[1].w
 	
-	if ((ratio1-ratio2)/ratio2)<=aspectratio and ((ratio2-ratio1)/ratio1)<=aspectratio:
-	
-		for i in xrange(len(imagelist)+1):
-			for j in xrange(i+1,len(imagelist)):
-				try:
-					if type(templist[(imagelist[i].path,imagelist[j].path)]) == float or templist[(imagelist[i].path,imagelist[j].path)].encode('ascii') == 'na':
-						yield [imagelist[i],imagelist[j]]
-						continue
-					else:
-						yield [imagelist[i],imagelist[j]]
-				except:
+        for i in xrange(len(imagelist)+1):
+		for j in xrange(i+1,len(imagelist)):
+			try:
+				if type(templist[(imagelist[i].path,imagelist[j].path)]) == float or templist[(imagelist[i].path,imagelist[j].path)].encode('ascii') == 'na':
 					yield [imagelist[i],imagelist[j]]
+					#continue
+				else:
+					yield [imagelist[i],imagelist[j]]
+			except:
+				yield [imagelist[i],imagelist[j]]
 
 def triangle(numin):
 	return int(numin*(numin-1)/2)
@@ -132,12 +128,12 @@ def ssim(imagelist,macrosize,dimensions,thresholdlower,thresholdupper):
 	conn = sqlite3.connect('data.db')
 	cursor = conn.cursor()
 	cursor.execute('BEGIN TRANSACTION')
-	
+
 	pr = cProfile.Profile()
         pr.enable()
 	
-	#ssim_list = pool.map_async(mssim_test, combos(imagelist,cursor), int(triangle(len(imagelist))/float(numprocesses))).get(None)
-	ssim_list = map(mssim_test, combos(imagelist,cursor))
+	ssim_list = pool.map_async(mssim_test, combos(imagelist,cursor), int(triangle(len(imagelist))/float(numprocesses))).get(None)
+	#ssim_list = map(mssim_test, combos(imagelist,cursor))
 
         pr.disable()
         s = StringIO.StringIO()

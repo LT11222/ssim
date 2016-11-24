@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
 	conn = sqlite3.connect('data.db')
 	cursor = conn.cursor()
-
+	
 	try:
 		cursor.execute('ALTER TABLE ssim ADD COLUMN "%s" real DEFAULT null' % makekey(macrosize,dimensions))
 	except:
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 	
 	ssim_list = ssim(imagelist,macrosize,dimensions,thresholdlower,thresholdupper)
 	
-	sys.exit(1)
+	#sys.exit(1)
 	
 	conn = sqlite3.connect('data.db')
 	cursor = conn.cursor()
